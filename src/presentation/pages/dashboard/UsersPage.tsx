@@ -1,53 +1,13 @@
-import React, { useEffect } from 'react';
-import { useUserStore } from '../../store/userStore';
-import { toast } from 'react-hot-toast';
+import React from 'react';
 import { FiUsers } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi2';
+import { useUsersManagement } from '../../components/users/hooks/useUsersManagement';
 import { UserRow } from '../../components/users/UserRow';
 
 export const UsersPage: React.FC = () => {
-  const { users, isLoading, error, fetchAllUsers, updateUserByAdmin } = useUserStore();
+  const { users, isLoading, error, handleRoleChange, handleToggleDisabled } = useUsersManagement();
 
-  useEffect(() => {
-    fetchAllUsers();
-  }, [fetchAllUsers]);
-
-  const handleRoleChange = (uid: string, role: string) => {
-    const newRole = role === 'admin' ? 'user' : 'admin';
-    toast.promise(
-      updateUserByAdmin(uid, { role: newRole }),
-      {
-        loading: 'Actualizando rol...',
-        success: 'Rol actualizado con éxito.',
-        error: 'No se pudo actualizar el rol.',
-      }
-    );
-  };
-
-  const handleToggleActiveStatus = (uid: string, currentStatus: boolean) => {
-    const newStatus = !currentStatus;
-    toast.promise(
-      updateUserByAdmin(uid, { is_active: newStatus }),
-      {
-        loading: newStatus ? 'Activando usuario...' : 'Desactivando usuario...',
-        success: newStatus ? 'Usuario activado correctamente.' : 'Usuario desactivado correctamente.',
-        error: 'No se pudo actualizar el estado del usuario.',
-      }
-    );
-  };
-
-  const handleToggleDisabledStatus = (uid: string, currentStatus: boolean) => {
-    const newStatus = !currentStatus;
-    toast.promise(
-      updateUserByAdmin(uid, { is_disabled: newStatus }),
-      {
-        loading: newStatus ? 'Deshabilitando usuario...' : 'Habilitando usuario...',
-        success: newStatus ? 'Usuario deshabilitado correctamente.' : 'Usuario habilitado correctamente.',
-        error: 'No se pudo actualizar el estado del usuario.',
-      }
-    );
-  };
-
+  // Loading State
   if (isLoading && users.length === 0) {
     return (
       <div className="p-4 md:p-8">
@@ -61,6 +21,7 @@ export const UsersPage: React.FC = () => {
     );
   }
 
+  // Error State
   if (error) {
     return (
       <div className="p-4 md:p-8">
@@ -80,7 +41,7 @@ export const UsersPage: React.FC = () => {
   return (
     <div className="p-4 md:p-8 space-y-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+        {/* Header */}
         <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-8 text-white mb-6">
           <div className="flex items-start justify-between">
             <div>
@@ -116,33 +77,26 @@ export const UsersPage: React.FC = () => {
                     key={user.uid}
                     user={user}
                     onRoleChange={handleRoleChange}
-                    onToggleActive={handleToggleActiveStatus}
-                    onToggleDisabled={handleToggleDisabledStatus}
+                    onToggleDisabled={handleToggleDisabled}
                     isLast={index === users.length - 1}
                   />
                 ))}
+                  <tr className="bg-white">
+                    <td colSpan={4} className="px-6 py-6">
+                      {/* Espacio vacío intencional */}
+                    </td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td colSpan={4} className="px-6 py-6">
+                      {/* Espacio vacío intencional */}
+                    </td>
+                  </tr>                  
                 
-                {users.length > 0 && (
-                  <tr className="bg-white">
-                    <td colSpan={4} className="px-6 py-6">
-                      {/* Espacio vacío intencional */}
-                    </td>
-                    
-                  </tr>
-                  
-                )}
-                 {users.length > 0 && (
-                  <tr className="bg-white">
-                    <td colSpan={4} className="px-6 py-6">
-                      {/* Espacio vacío intencional */}
-                    </td>
-                  </tr>
-                  
-                )}
               </tbody>
             </table>
           </div>
 
+          {/* Empty State */}
           {users.length === 0 && (
             <div className="p-12 text-center text-gray-500">
               <FiUsers size={48} className="mx-auto mb-4 text-gray-300" />

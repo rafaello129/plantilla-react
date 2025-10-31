@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { FiEdit, FiToggleLeft, FiToggleRight, FiCheck, FiX } from 'react-icons/fi';
+import React, { useState, useRef, useEffect } from 'react';
+import { FiEdit, FiToggleLeft, FiToggleRight } from 'react-icons/fi';
+
+import { RoleSelector } from './RoleSelector';
+import type { UserRole } from '../../../domain/constants/userRoles';
 import type { User } from '../../../domain/entities';
 
 interface UserRowProps {
   user: User;
-  onRoleChange: (uid: string, role: string) => void;
-  onToggleActive: (uid: string, currentStatus: boolean) => void;
+  onRoleChange: (uid: string, newRole: UserRole) => void;
   onToggleDisabled: (uid: string, currentStatus: boolean) => void;
   isLast: boolean;
 }
@@ -13,11 +15,24 @@ interface UserRowProps {
 export const UserRow: React.FC<UserRowProps> = ({ 
   user, 
   onRoleChange, 
-  onToggleActive,
   onToggleDisabled,
   isLast 
 }) => {
   const [showActions, setShowActions] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowActions(false);
+      }
+    };
+
+    if (showActions) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showActions]);
 
   return (
     <tr className={`bg-white hover:bg-gray-50 transition-colors ${!isLast ? 'border-b border-gray-200' : ''}`}>
@@ -43,30 +58,21 @@ export const UserRow: React.FC<UserRowProps> = ({
 
       {/* Rol */}
       <td className="px-6 py-4">
-        <span
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full ${
-            user.role === 'admin'
-              ? 'bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 ring-1 ring-emerald-200'
-              : 'bg-gray-100 text-gray-700 ring-1 ring-gray-200'
-          }`}
-        >
-          {user.role === 'admin' && '👑'}
-          {user.role?.toUpperCase()}
-        </span>
+        <RoleSelector
+          currentRole={user.role || 'user'}
+          onRoleChange={(newRole) => onRoleChange(user.uid, newRole)}
+        />
       </td>
 
       {/* Estado */}
       <td className="px-6 py-4">
         <div className="flex flex-col gap-1.5">
-
-          {/* Estado Habilitado/Deshabilitado */}
-          {user.is_disabled && (
+          {user.is_disabled ? (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 ring-1 ring-orange-200">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
               Deshabilitado
             </span>
-          )}
-           {!user.is_disabled && (
+          ) : (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 ring-1 ring-blue-200">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
               Habilitado
@@ -75,12 +81,10 @@ export const UserRow: React.FC<UserRowProps> = ({
         </div>
       </td>
 
-
       {/* Acciones */}
       <td className="px-6 py-4">
         <div className="flex items-center justify-center gap-2">
-          {/* Menú desplegable de acciones */}
-          <div className="relative">
+          <div className="relative" ref={menuRef}>
             <button
               onClick={() => setShowActions(!showActions)}
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-all active:scale-95 border border-emerald-200"
@@ -89,56 +93,32 @@ export const UserRow: React.FC<UserRowProps> = ({
               <span>Acciones</span>
             </button>
 
-            {/* Dropdown Menu */}
             {showActions && (
-              <>
-                {/* Overlay para cerrar el menú al hacer clic fuera */}
-                <div 
-                  className="fixed inset-0 z-10" 
-                  onClick={() => setShowActions(false)}
-                />
-
-                {/* Menú de acciones */}
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg border border-gray-200 z-20 overflow-hidden">
-                  {/* Cambiar Rol */}
-                  <button
-                    onClick={() => {
-                      onRoleChange(user.uid, user.role || 'user');
-                      setShowActions(false);
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all flex items-center gap-3 group border-b border-gray-100"
-                  >
-                    <FiEdit className="text-gray-400 group-hover:text-emerald-600 transition-colors" size={16} />
-                    <span className="font-medium">Cambiar Rol</span>
-                  </button>
-
-
-                  {/* Toggle Habilitado/Deshabilitado */}
-                  <button
-                    onClick={() => {
-                      onToggleDisabled(user.uid, user.is_disabled);
-                      setShowActions(false);
-                    }}
-                    className={`w-full text-left px-4 py-3 text-sm transition-all flex items-center gap-3 group ${
-                      user.is_disabled 
-                        ? 'text-blue-700 hover:bg-blue-50' 
-                        : 'text-orange-700 hover:bg-orange-50'
-                    }`}
-                  >
-                    {user.is_disabled ? (
-                      <>
-                        <FiToggleRight className="text-blue-400 group-hover:text-blue-600 transition-colors" size={16} />
-                        <span className="font-medium">Habilitar Usuario</span>
-                      </>
-                    ) : (
-                      <>
-                        <FiToggleLeft className="text-orange-400 group-hover:text-orange-600 transition-colors" size={16} />
-                        <span className="font-medium">Deshabilitar Usuario</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </>
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg border border-gray-200 z-20 overflow-hidden">
+                <button
+                  onClick={() => {
+                    onToggleDisabled(user.uid, user.is_disabled);
+                    setShowActions(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 text-sm transition-all flex items-center gap-3 group ${
+                    user.is_disabled 
+                      ? 'text-blue-700 hover:bg-blue-50' 
+                      : 'text-orange-700 hover:bg-orange-50'
+                  }`}
+                >
+                  {user.is_disabled ? (
+                    <>
+                      <FiToggleRight className="text-blue-400 group-hover:text-blue-600 transition-colors" size={16} />
+                      <span className="font-medium">Habilitar Usuario</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiToggleLeft className="text-orange-400 group-hover:text-orange-600 transition-colors" size={16} />
+                      <span className="font-medium">Deshabilitar Usuario</span>
+                    </>
+                  )}
+                </button>
+              </div>
             )}
           </div>
         </div>
