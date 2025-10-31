@@ -26,7 +26,7 @@ export const ProfilePage: React.FC = () => {
           phone: profile.phone || '',
           picture: profile.picture || '',
         });
-      } catch (error) {
+      } catch {
         toast.error('No se pudo cargar el perfil.');
       } finally {
         setIsLoading(false);
@@ -49,8 +49,9 @@ export const ProfilePage: React.FC = () => {
       });
 
       toast.success('Perfil actualizado con éxito.', { id: toastId });
-    } catch (error: any) {
-      toast.error(error.message || 'Error al actualizar.', { id: toastId });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error al actualizar.';
+      toast.error(message, { id: toastId });
     }
   };
 
