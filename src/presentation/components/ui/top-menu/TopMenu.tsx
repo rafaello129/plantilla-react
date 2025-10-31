@@ -28,7 +28,7 @@ export const TopMenu = () => {
           ></div>
   
           {/* Modal centrado */}
-          <div className="relative bg-white rounded-2xl shadow-2xl p-8 w-[90%] max-w-md text-center transform transition-all duration-300 scale-100">
+          <div className="relative bg-white rounded-2xl p-8 w-[90%] max-w-md text-center transform transition-all duration-300 scale-100">
             <h2 className="text-3xl font-semibold text-gray-900 mb-4">
               ¿Cerrar sesión?
             </h2>
@@ -77,7 +77,7 @@ export const TopMenu = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between px-4 lg:px-6 h-16 bg-white border-b border-gray-200 backdrop-blur-sm bg-white/95 m-0 md:m-3 md:mb-0 rounded-0 md:rounded-t-xl shadow-sm">
+    <header className="sticky top-0 z-20 flex items-center justify-between px-4 lg:px-6 h-16 bg-white border-b border-gray-200 backdrop-blur-sm bg-white/95 m-0  md:mb-0 rounded-0 md:rounded-t-xl">
       
       {/* Left Section */}
       <div className="flex items-center gap-4">
@@ -113,7 +113,7 @@ export const TopMenu = () => {
               className="w-9 h-9 rounded-full ring-2 ring-gray-200 group-hover:ring-emerald-400 transition-all"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-sm font-bold shadow-md ring-2 ring-gray-200 group-hover:ring-emerald-400 transition-all">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-sm font-bold ring-2 ring-gray-200 group-hover:ring-emerald-400 transition-all">
               {user?.username?.charAt(0).toUpperCase()}
             </div>
           )}
@@ -138,7 +138,7 @@ export const TopMenu = () => {
         {/* Dropdown Menu */}
         {isDropdownOpen && (
           <>
-            <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-2 overflow-hidden animate-fade-in">
+            <div className="absolute right-0 w-64 bg-white rounded-xl border border-gray-200 py-2 overflow-hidden animate-fade-in">
               {/* User Info Header */}
               <div className="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-teal-50">
                 <div className="flex items-center gap-3">

@@ -30,7 +30,7 @@ export const Sidebar = () => {
           bg-white border-r border-gray-200
           transform transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-          md:static md:translate-x-0 md:m-3 md:rounded-xl
+          md:static md:translate-x-0  md:rounded-xl
           flex flex-col
         `}
       >

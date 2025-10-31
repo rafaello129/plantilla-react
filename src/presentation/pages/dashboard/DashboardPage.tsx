@@ -14,7 +14,7 @@ export const DashboardPage: React.FC = () => {
   return (
       <div className="min-h-screen bg-gray-100 p-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="bg-white rounded-lg p-8">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-bold">Dashboard</h1>
               <button

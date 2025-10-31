@@ -29,7 +29,7 @@ export const DashboardLayout: FC<Props> = ({ children }) => {
         <TopMenu />
 
         {/* Main content */}
-        <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-50 m-0 md:mx-3 md:mb-3">
+        <main className="flex-1">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>

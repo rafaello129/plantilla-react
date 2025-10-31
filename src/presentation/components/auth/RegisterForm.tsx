@@ -240,7 +240,7 @@ export const RegisterForm: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 px-6 rounded-lg font-semibold text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2 group text-sm"
+              className="w-full py-2.5 px-6 rounded-lg font-semibold text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 group text-sm"
             >
               <span>{isLoading ? "Registrando..." : "Crear Cuenta"}</span>
               {!isLoading && <FiArrowRight className="group-hover:translate-x-1 transition-transform" size={16} />}
