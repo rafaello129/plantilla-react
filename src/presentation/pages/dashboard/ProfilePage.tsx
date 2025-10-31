@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import { FiUser, FiMail, FiPhone, FiCamera, FiSave } from 'react-icons/fi';
 
 export const ProfilePage: React.FC = () => {
-  const { user, login } = useAuthStore();
+  const { user, login, renewToken } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const { formState, onInputChange, setFormState } = useForm({
     name: '',
@@ -39,13 +39,9 @@ export const ProfilePage: React.FC = () => {
     e.preventDefault();
     const toastId = toast.loading('Actualizando perfil...');
     try {
-      const updatedUser = await updateUserProfileUseCase.execute(formState);
-      // Actualizamos el usuario en el store de auth
-      // Nota: Esto es una simplificación. Idealmente, el backend devolvería el objeto User completo y actualizado.
-      if (user) {
-        const newCredentials = { username: user.username, password: '', role: user.role || 'user' };
-        login(newCredentials); // Forzamos una recarga del usuario desde el store
-      }
+
+       renewToken()
+      
 
       toast.success('Perfil actualizado con éxito.', { id: toastId });
     } catch (error: any) {
@@ -59,7 +55,7 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl p-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Mi Perfil</h1>
         <p className="text-gray-500 mb-8">Actualiza tu información personal y de contacto.</p>
 
