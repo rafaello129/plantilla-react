@@ -2,8 +2,7 @@ import type {
     LoginCredentials, 
     RegisterData, 
     AuthResponse, 
-    RenewResponse,
-    User 
+    RenewResponse 
   } from '../entities';
   
   export interface IAuthRepository {

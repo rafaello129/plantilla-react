@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { User, UpdateUserDto, UpdateUserByAdminDto } from '../../domain/entities';
+import type { User, UpdateUserByAdminDto } from '../../domain/entities';
 import {
   getAllUsersUseCase,
   updateUserByAdminUseCase,
