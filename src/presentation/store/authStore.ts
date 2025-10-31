@@ -29,7 +29,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         // Estado inicial
         user: TokenStorage.getUser(),
         accessToken: TokenStorage.getToken(),
