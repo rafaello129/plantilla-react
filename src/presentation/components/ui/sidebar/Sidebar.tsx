@@ -2,10 +2,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { useUiStore } from '../../../store/ui/useUiStore';
 import { FiX } from 'react-icons/fi';
 import { HiHome, HiSparkles, HiUsers } from 'react-icons/hi2';
+import { useAuthStore } from '../../../store/authStore';
 
 export const Sidebar = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useUiStore();
   const location = useLocation();
+  const { user } = useAuthStore();
 
   const menuItems = [
     {
@@ -13,11 +15,11 @@ export const Sidebar = () => {
       icon: HiHome,
       label: 'Inicio',
     },
-    {
+    ...(user?.role === 'admin' ? [{ // <-- Añadido condicional
       path: '/dashboard/users',
       icon: HiUsers,
       label: 'Usuarios',
-    },
+    }] : []),
   ];
 
   const isActive = (path: string) => location.pathname === path;
